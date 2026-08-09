@@ -1,6 +1,15 @@
 import { useState } from "react";
 
-function AddExpenseForm() {
+type AddExpenseFormProps = {
+  onAddExpense: (
+    description: string,
+    amount: number,
+    category: string,
+    date: string
+  ) => void;
+};
+
+function AddExpenseForm({ onAddExpense }: AddExpenseFormProps) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("Food");
@@ -9,12 +18,21 @@ function AddExpenseForm() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    console.log({
+    if (!description || !amount || !date) {
+      return;
+    }
+
+    onAddExpense(
       description,
-      amount,
+      Number(amount),
       category,
-      date,
-    });
+      date
+    );
+
+    setDescription("");
+    setAmount("");
+    setCategory("Food");
+    setDate("");
   };
 
   return (
@@ -35,7 +53,9 @@ function AddExpenseForm() {
           <input
             type="text"
             value={description}
-            onChange={(event) => setDescription(event.target.value)}
+            onChange={(event) =>
+              setDescription(event.target.value)
+            }
             placeholder="e.g. Lunch"
             className="mt-2 w-full rounded-lg border border-slate-200 p-3 outline-none focus:border-slate-500"
           />
@@ -49,7 +69,9 @@ function AddExpenseForm() {
           <input
             type="number"
             value={amount}
-            onChange={(event) => setAmount(event.target.value)}
+            onChange={(event) =>
+              setAmount(event.target.value)
+            }
             placeholder="e.g. 450"
             className="mt-2 w-full rounded-lg border border-slate-200 p-3 outline-none focus:border-slate-500"
           />
@@ -62,7 +84,9 @@ function AddExpenseForm() {
 
           <select
             value={category}
-            onChange={(event) => setCategory(event.target.value)}
+            onChange={(event) =>
+              setCategory(event.target.value)
+            }
             className="mt-2 w-full rounded-lg border border-slate-200 p-3 outline-none focus:border-slate-500"
           >
             <option>Food</option>
@@ -82,7 +106,9 @@ function AddExpenseForm() {
           <input
             type="date"
             value={date}
-            onChange={(event) => setDate(event.target.value)}
+            onChange={(event) =>
+              setDate(event.target.value)
+            }
             className="mt-2 w-full rounded-lg border border-slate-200 p-3 outline-none focus:border-slate-500"
           />
         </div>
